@@ -25,7 +25,7 @@ jobs:
       uses: r0adkll/sign-android-release@v1
       with:
         releaseDirectory: app/build/outputs/apk/release
-        signingKeyBase64: ${{ secrets.SIGNINGKEYBASE64 }}
+        signingKeyBase64: ${{ secrets.SIGNINGKEYBASE64 }} # openssl base64 < kleini-keystore.jks | tr -d '\n' | tee kleini-keystore.jks.base64.txt
         alias: ${{ secrets.ALIAS }}
         keyStorePassword: ${{ secrets.KEYSTOREPASSWORD }}
         keyPassword: ${{ secrets.KEYPASSWORD }}
