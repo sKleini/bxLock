@@ -45,7 +45,7 @@ jobs:
         mkdir -p app/release
         mv -f "app/build/outputs/apk/release/app-release-unsigned-signed.apk" "app/release/${APP}-${current_time}.apk"
 
-        git add app/release
+        git add -f app/release
         git commit -m "Update release apk"
 
         git push
