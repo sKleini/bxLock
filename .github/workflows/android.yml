@@ -1,0 +1,51 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+    - name: Build with Gradle
+      run: ./gradlew assemble
+    - name: Sign APK
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: app/build/outputs/apk/release
+        signingKeyBase64: ${{ secrets.SIGNINGKEYBASE64 }}
+        alias: ${{ secrets.ALIAS }}
+        keyStorePassword: ${{ secrets.KEYSTOREPASSWORD }}
+        keyPassword: ${{ secrets.KEYPASSWORD }}
+    - name: Setup git
+      run: |
+        git config --global user.name ${{ secrets.ACTIONS_USERNAME }}
+        git config --global user.email ${{ secrets.ACTIONS_EMAIL }}
+        git config --global pull.ff only
+    - name: Rename, Add, Commit and Push APK
+      run: |
+        APP=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f2)
+        export TZ=Europe/Berlin
+        current_time=$(date "+%Y%m%d-%H%M%S")
+
+        git pull
+        rm -r app/release
+        mkdir -p app/release
+        mv -f "app/build/outputs/apk/release/app-release-unsigned-signed.apk" "app/release/${APP}-${current_time}.apk"
+
+        git add app/release
+        git commit -m "Update release apk"
+
+        git push
