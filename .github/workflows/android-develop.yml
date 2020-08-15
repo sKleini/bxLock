@@ -1,10 +1,19 @@
-name: Android CI/CD on develop
+name: Android CI/CD on Branch
 
 on:
   push:
-    branches: [ develop ]
+    branches:    
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - '!master'   # excludes master
   pull_request:
-    branches: [ develop ]
+    branches:    
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - '!master'   # excludes master
+
 
 jobs:
   build:
@@ -48,12 +57,12 @@ jobs:
 
         git clone "https://${{ secrets.API_TOKEN_GITHUB }}@github.com/$OWNER/APK-releases" "$CLONEDIR"
 
-        mkdir -p $CLONEDIR/$APP/develop
-        rm -rf $CLONEDIR/$APP/develop/*
+        mkdir -p $CLONEDIR/$APP/${GITHUB_REF##*/}
+        rm -rf $CLONEDIR/$APP/${GITHUB_REF##*/}/*
 
-        mv -f "app/build/outputs/apk/release/app-release-unsigned-signed.apk" "$CLONEDIR/$APP/develop/$APP.apk"
+        mv -f "app/build/outputs/apk/release/app-release-unsigned-signed.apk" "$CLONEDIR/$APP/${GITHUB_REF##*/}/$APP.apk"
         
-        ls -la "$CLONEDIR/$APP/develop"
+        ls -la "$CLONEDIR/$APP/${GITHUB_REF##*/}"
         cd "$CLONEDIR"
         
         git add .
