@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">bxLock</string>
     <string name="finish">Off</string>
+    <string name="permission_required">Display-over-other-apps permission is required for the lock screen</string>
 </resources>
