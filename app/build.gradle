@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'de.kleini.bxlock'
-    compileSdkVersion 34
-    buildToolsVersion "34.0.0"
+    compileSdkVersion 33
+    buildToolsVersion "33.0.2"
 
     defaultConfig {
         applicationId "de.kleini.bxlock"
         minSdkVersion 28
-        targetSdkVersion 34
+        targetSdkVersion 33
         versionCode 1
         versionName "1.5"
 
