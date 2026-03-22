@@ -31,10 +31,10 @@ jobs:
       run: chmod +x ./gradlew
     - name: Build with Gradle
       run: ./gradlew assemble
+    - name: Symlink build-tools for signing action
+      run: ln -sf $ANDROID_SDK_ROOT/build-tools/33.0.2 $ANDROID_SDK_ROOT/build-tools/29.0.3
     - name: Sign APK
       uses: r0adkll/sign-android-release@v1
-      env:
-        ANDROID_BUILD_TOOLS_VERSION: 33.0.2
       with:
         releaseDirectory: app/build/outputs/apk/release
         signingKeyBase64: ${{ secrets.SIGNINGKEYBASE64 }} # openssl base64 < kleini-keystore.jks | tr -d '\n' | tee kleini-keystore.jks.base64.txt
